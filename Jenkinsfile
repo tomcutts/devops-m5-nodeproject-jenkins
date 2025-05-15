@@ -1,5 +1,5 @@
 pipeline-build-test1{
-    agent { node { label 'Built-In Node' } } 
+    agent any
 
     environment {
         CLEANUP_SCRIPT = "clean-up.sh"
