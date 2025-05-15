@@ -49,9 +49,11 @@ pipeline-build-test1{
 
     post {
         always {
+            sh """
             echo 'Pipeline completed.'
             archiveArtifacts artifacts: 'clean-up.sh', fingerprint: true
             echo 'Cleanup script executed and archived.
+            """
         }
     }
 
