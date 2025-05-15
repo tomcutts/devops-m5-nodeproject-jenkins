@@ -25,12 +25,23 @@ pipeline-build-test1{
             }
         }
 
-        // Example next stage
         stage('Docker Build') {
             steps {
                sh """
                chmod +x Dockerfile
-               docker build
+               
+               cd nginx && chmod +x Dockerfile && docker build -t nginx-reverse-proxy
+               cd .. && docker build -t flask-app
+               """
+            }
+        }
+    }
+
+        stage('Docker Run') {
+            steps {
+               sh """
+               cd nginx && docker run -p 80:80 nginx-reverse-proxy
+               cd .. && docker run -p 5500:80 -e YOUR_NAME="Tom" flask-app
                """
             }
         }
