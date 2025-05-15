@@ -52,4 +52,4 @@ pipeline-build-test1{
             echo 'Pipeline completed.'
         }
     }
-}
+
