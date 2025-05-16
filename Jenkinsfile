@@ -29,6 +29,7 @@ pipeline {
                     sh "chmod +x Dockerfile"
                     sh "docker build -t flask-app ."
                     sh "docker run --name flask-app -d -p 5500:80 -e YOUR_NAME='Tom' flask-app"
+                    sh "docker ps -a"
                   
                 }
             }
@@ -43,7 +44,7 @@ pipeline {
                         sh "chmod +x Dockerfile"
                         sh "docker build -t nginx-reverse-proxy ."
                         sh "docker run --name nginx-reverse-proxy -d -p 80:80 nginx-reverse-proxy"
-                        sh "docker ps -la"
+                        sh "docker ps -a"
                   
                 }
             }
