@@ -8,7 +8,7 @@ pipeline {
   //  }
 
     stages {
-        stage('Initial Cleanup') {
+        stage('Initial Cleanup & Create Custom Network') {
             steps {
                 script {
                     catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
@@ -17,6 +17,7 @@ pipeline {
                     sh "docker rmi -f flask-app"
                     sh "docker rm -f nginx-reverse-proxy"
                     sh "docker rmi -f nginx-reverse-proxy"
+                    sh "docker network create custom-network || true"
                     }
                 }
             }
@@ -28,7 +29,7 @@ pipeline {
                     sh "echo Building and running flask-app"
                     sh "chmod +x Dockerfile"
                     sh "docker build -t flask-app ."
-                    sh "docker run --name flask-app-hello -d -p 5500:80 -e YOUR_NAME='Tom' flask-app"
+                    sh "docker run --name flask-app-hello --network custom-network -d -p 5500:80 -e YOUR_NAME='Tom' flask-app"
                     sh "docker ps -a"
                   
                 }
@@ -43,7 +44,7 @@ pipeline {
                         sh "echo building and running nginx"
                         sh "chmod +x Dockerfile"
                         sh "docker build -t nginx-reverse-proxy ."
-                        sh "docker run --name nginx-reverse-proxy -d -p 80:80 nginx-reverse-proxy"
+                        sh "docker run --name nginx-reverse-proxy --network custom-network -d -p 80:80 nginx-reverse-proxy"
                         sh "docker ps -a"
                   
                 }
