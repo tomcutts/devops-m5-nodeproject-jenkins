@@ -71,8 +71,8 @@ pipeline {
         stage('Docker run containers') {
             steps {
                 script {
-                    sh "docker run --name nginx-reverse-proxy --network custom-network -d -p 80:80 nginx-reverse-proxy"
                     sh "docker run --name flask-app-hello --network custom-network -d -p 5500:80 -e YOUR_NAME='Tom' flask-app"
+                    sh "docker run --name nginx-reverse-proxy --network custom-network -d -p 80:80 nginx-reverse-proxy"
                     sh "docker ps -a"
                   
                 }
