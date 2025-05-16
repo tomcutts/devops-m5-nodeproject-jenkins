@@ -13,7 +13,6 @@ pipeline {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
                     sh """
-                        echo "#!/bin/bash" > ${CLEANUP_SCRIPT}
                         echo "echo Cleaning up Docker containers and images..." >> ${CLEANUP_SCRIPT}
                         echo "docker rm -f \$(docker ps -aq)" >> ${CLEANUP_SCRIPT}
                         echo "docker rmi -f \$(docker images -aq)" >> ${CLEANUP_SCRIPT}
