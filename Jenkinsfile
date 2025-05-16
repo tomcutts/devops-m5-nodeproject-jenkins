@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    options {
+        timestamps()
+         }
     environment {
         CLEANUP_SCRIPT = "clean-up.sh"
     }
