@@ -3,55 +3,57 @@ pipeline {
     options {
         timestamps()
          }
-    environment {
-        CLEANUP_SCRIPT = "clean-up.sh"
-    }
+    //environment {
+       // CLEANUP_SCRIPT = "clean-up.sh"
+  //  }
 
     stages {
         stage('Initial Cleanup') {
             steps {
                 script {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
-                    sh """
-                        echo "echo Cleaning up Docker containers and images..." >> ${CLEANUP_SCRIPT}
-                        echo "docker rm -f \$(docker ps -aq)" >> ${CLEANUP_SCRIPT}
-                        echo "docker rmi -f \$(docker images -aq)" >> ${CLEANUP_SCRIPT}
-                        chmod +x ${CLEANUP_SCRIPT}
-                        ./${CLEANUP_SCRIPT}
-                    """
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
+                    sh "echo Cleaning up Docker containers and images..."
+                    sh "docker rm -f flask-app"
+                    sh "docker rmi -f flask-app"
+                    sh "docker rm -f nginx-reverse-proxy"
+                    sh "docker rmi -f nginx-reverse-proxy"
                     }
                 }
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker build & run flask-app') {
             steps {
-                sh """
-                    echo "Building from the dockerfiles"
-                    chmod +x Dockerfile
-                    cd nginx && chmod +x Dockerfile && docker build -t nginx-reverse-proxy .
-                    cd .. && docker build -t flask-app .
-                """
+                script {
+                    sh "echo Building and running flask-app"
+                    sh "chmod +x Dockerfile"
+                    sh "docker build -t flask-app ."
+                    sh "docker run --name flask-app -d -p 5500:80 -e YOUR_NAME='Tom' flask-app"
+                  
+                }
             }
         }
 
-        stage('Docker Run') {
+        stage('Docker build & run nginx') {
             steps {
-                sh """
-                    echo "running the docker containers"
-                    cd nginx && docker run --name nginx-reverse-server -d -p 80:80 nginx-reverse-proxy
-                    cd .. && docker run --name flask-app -d -p 5500:80 -e YOUR_NAME='Tom' flask-app
-                    docker ps -la
-                """
+                script {
+                // Navigate to the nginx directory
+                    dir('nginx') {
+                        sh "echo building and running nginx"
+                        sh "chmod +x Dockerfile"
+                        sh "docker build -t nginx-reverse-proxy ."
+                        sh "docker run --name nginx-reverse-proxy -d -p 80:80 nginx-reverse-proxy"
+                        sh "docker ps -la"
+                  
+                }
             }
         }
     }
+}
 
     post {
         always {
             echo 'Pipeline completed.'
-            archiveArtifacts artifacts: 'clean-up.sh', fingerprint: true
-            echo 'Cleanup script executed and archived.'
         }
     }
 }
