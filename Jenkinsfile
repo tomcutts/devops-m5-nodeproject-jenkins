@@ -13,7 +13,7 @@ pipeline {
                 script {
                     catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
                     sh "echo Cleaning up Docker containers and images..."
-                    sh "docker rm -f flask-app"
+                    sh "docker rm -f flask-app-hello"
                     sh "docker rmi -f flask-app"
                     sh "docker rm -f nginx-reverse-proxy"
                     sh "docker rmi -f nginx-reverse-proxy"
