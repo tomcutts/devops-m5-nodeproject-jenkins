@@ -43,6 +43,7 @@ pipeline {
                     echo "running the docker containers"
                     cd nginx && docker run --name nginx-reverse-server -d -p 80:80 nginx-reverse-proxy
                     cd .. && docker run --name flask-app -d -p 5500:80 -e YOUR_NAME='Tom' flask-app
+                    docker ps -la
                 """
             }
         }
