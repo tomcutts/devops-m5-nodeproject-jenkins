@@ -100,8 +100,6 @@ pipeline {
     post {
         always {
             echo 'Pipeline completed.'
-            archiveArtifacts artifacts: 'trivy-*.txt', fingerprint: true
-            }
         }
     }
 }
