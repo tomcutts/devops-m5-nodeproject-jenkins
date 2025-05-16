@@ -48,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('Run security scans...') {
+        stage('Run security scans') {
             steps {
                 script {
                 // Run security scans with Trivy
@@ -57,6 +57,7 @@ pipeline {
                         trivy image --severity CRITICAL,HIGH --exit-code 0 --format table --output trivy-nginx.txt nginx-reverse-proxy
                     '''
                 }
+            }
                 post {
                     always {
                         archiveArtifacts artifacts: 'trivy-*.txt', fingerprint: true
@@ -66,7 +67,6 @@ pipeline {
                 }
             }
         }
-    }
 
         stage('Docker run containers') {
             steps {
@@ -99,7 +99,7 @@ pipeline {
                 }
             }
         }
-
+    }
     post {
         always {
             echo "Pipeline completed."
