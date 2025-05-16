@@ -9,7 +9,7 @@ pipeline {
         stage('Initial Cleanup') {
             steps {
                 script {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE')
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
                     sh """
                         echo "#!/bin/bash" > ${CLEANUP_SCRIPT}
                         echo "echo Cleaning up Docker containers and images..." >> ${CLEANUP_SCRIPT}
@@ -20,6 +20,7 @@ pipeline {
                         chmod +x ${CLEANUP_SCRIPT}
                         ./${CLEANUP_SCRIPT}
                     """
+                    }
                 }
             }
         }
