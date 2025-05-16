@@ -47,6 +47,7 @@ pipeline {
                 }
             }
         }
+
         stage('Run security scans...') {
             steps {
                 script {
@@ -60,7 +61,7 @@ pipeline {
                     always {
                         archiveArtifacts artifacts: 'trivy-*.txt', fingerprint: true
                 }
-                    failure{
+                    failure {
                         echo "X Vunerabilities detected - blocking the pipeline"
                 }
             }
