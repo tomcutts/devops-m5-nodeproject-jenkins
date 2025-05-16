@@ -28,7 +28,7 @@ pipeline {
                     sh "echo Building and running flask-app"
                     sh "chmod +x Dockerfile"
                     sh "docker build -t flask-app ."
-                    sh "docker run --name flask-app -d -p 5500:80 -e YOUR_NAME='Tom' flask-app"
+                    sh "docker run --name flask-app-hello -d -p 5500:80 -e YOUR_NAME='Tom' flask-app"
                     sh "docker ps -a"
                   
                 }
