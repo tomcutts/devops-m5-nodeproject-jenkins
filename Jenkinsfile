@@ -16,8 +16,6 @@ pipeline {
                         echo "echo Cleaning up Docker containers and images..." >> ${CLEANUP_SCRIPT}
                         echo "docker rm -f \$(docker ps -aq)" >> ${CLEANUP_SCRIPT}
                         echo "docker rmi -f \$(docker images -aq)" >> ${CLEANUP_SCRIPT}
-                        echo "docker rm -f \$(docker ps -aq)" >> ${CLEANUP_SCRIPT}
-                        echo "docker rmi -f \$(docker images -aq)" >> ${CLEANUP_SCRIPT}
                         chmod +x ${CLEANUP_SCRIPT}
                         ./${CLEANUP_SCRIPT}
                     """
